@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BeritaController;
 
-Route::prefix('v1')->group(function () {
+Route::middleware('api.key')->prefix('v1')->group(function () {
     Route::prefix('berita')->group(function () {
         Route::get('/', [BeritaController::class, 'index']);
         Route::get('/latest', [BeritaController::class, 'latest']);

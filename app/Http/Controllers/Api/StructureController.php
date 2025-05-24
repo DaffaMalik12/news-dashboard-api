@@ -9,13 +9,38 @@ use Illuminate\Http\Request;
 class StructureController extends Controller
 {
     /**
-     * Display a listing of the resource (all structures).
+     * Display a listing of the resource (all structures) with optional filters.
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request) // <-- Ambil instance Request
     {
-        // Mengambil semua data structure dari database
-        $structures = Structure::all();
+        // Mulai membangun query
+        $query = Structure::query(); // <-- Gunakan query() untuk memulai query builder
+
+        // Jika ada filter berdasarkan ID (query parameter: ?id=...)
+        if ($request->has('id')) {
+            $query->where('id', $request->get('id'));
+        }
+
+        // Jika ada filter berdasarkan nama (query parameter: ?nama=...)
+        if ($request->has('nama')) {
+            $query->where('Nama', 'like', '%' . $request->get('nama') . '%'); // Perhatikan 'Nama' jika case-sensitive
+        }
+
+        // Jika ada filter berdasarkan jabatan (query parameter: ?jabatan=...)
+        if ($request->has('jabatan')) {
+            $query->where('Jabatan', 'like', '%' . $request->get('jabatan') . '%'); // Perhatikan 'Jabatan' jika case-sensitive
+        }
+
+        // Eksekusi query untuk mendapatkan hasilnya
+        $structures = $query->get(); // <-- Panggil get() di akhir
+
+        // Jika tidak ada data ditemukan
+        if ($structures->isEmpty()) {
+            return response()->json([
+                'message' => 'No structures found based on provided filters'
+            ], 404);
+        }
 
         // Mengembalikan data dalam format JSON dengan status 200 OK
         return response()->json([

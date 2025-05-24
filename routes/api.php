@@ -17,6 +17,9 @@ Route::middleware('api.key')->prefix('v1')->group(function () {
     Route::prefix('structures')->group(function () {
         Route::get('/', [StructureController::class, 'index']);
         Route::get('/{id}', [StructureController::class, 'show']);
+        Route::get('/{jabatan}', [StructureController::class, 'byJabatan']);
+        Route::get('/{nama}', [StructureController::class, 'byNama']);
+        
     });
 });
 

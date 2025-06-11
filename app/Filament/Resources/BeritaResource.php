@@ -21,11 +21,11 @@ class BeritaResource extends Resource
     protected static ?string $model = Berita::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
-    
+
     protected static ?string $navigationLabel = 'Berita';
-    
+
     protected static ?string $pluralModelLabel = 'Berita';
-    
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
@@ -139,12 +139,12 @@ class BeritaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('gambar')
-                ->label('Thumbnail')
-                ->disk('public')
-                ->height(50)
-                ->width(80)
-                ->extraAttributes(['class' => 'rounded-lg']),
-            
+                    ->label('Thumbnail')
+                    ->disk('public')
+                    ->height(50)
+                    ->width(80)
+                    ->extraAttributes(['class' => 'rounded-lg']),
+
 
                 Tables\Columns\TextColumn::make('judul')
                     ->label('Judul')
@@ -176,6 +176,16 @@ class BeritaResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
+
+                Tables\Columns\TextColumn::make('isi')
+                    ->label('Isi Berita')
+                    ->limit(100)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        return strlen(strip_tags($state)) > 100 ? strip_tags($state) : null;
+                    })
+                    ->formatStateUsing(fn(string $state): string => strip_tags($state))
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('tanggal_publish')
                     ->label('Tanggal Publish')
@@ -228,11 +238,11 @@ class BeritaResource extends Resource
                         return $query
                             ->when(
                                 $data['dari_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_publish', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('tanggal_publish', '>=', $date),
                             )
                             ->when(
                                 $data['sampai_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tanggal_publish', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('tanggal_publish', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {

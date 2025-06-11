@@ -9,9 +9,15 @@ class Berita extends Model
 {
     //
     protected $fillable = [
-        'judul', 'slug', 'isi', 'kategori', 'tanggal_publish', 'penulis', 'gambar',
+        'judul',
+        'slug',
+        'isi',
+        'kategori',
+        'tanggal_publish',
+        'penulis',
+        'gambar',
     ];
-    
+
 
     // Auto-generate slug
     protected static function booted()

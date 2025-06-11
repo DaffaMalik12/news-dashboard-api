@@ -22,6 +22,10 @@ class StructureResource extends Resource
     protected static ?string $navigationLabel = 'Struktur Organisasi';
     protected static ?string $pluralModelLabel = 'Struktur Organisasi';
     protected static ?string $modelLabel = 'Struktur Organisasi';
+    
+
+
+    // ... sisanya kode Anda tetap sama ...
 
     public static function form(Form $form): Form
     {
@@ -70,6 +74,14 @@ class StructureResource extends Resource
                                         'Koordinator',
                                         'Anggota'
                                     ]),
+
+                                Forms\Components\Textarea::make('detail')
+                                    ->label('Detail Jabatan')
+                                    ->maxLength(500)
+                                    ->placeholder('Masukkan detail jabatan atau tugas')
+                                    ->helperText('Opsional, berikan penjelasan lebih lanjut tentang tugas atau tanggung jawab anggota ini.')
+                                    ->columnSpanFull()
+                                    ->rows(3),
                             ]),
                     ])
             ]);
@@ -103,8 +115,12 @@ class StructureResource extends Resource
                                     default => 'gray',
                                 }),
                         ])->space(1),
+
+                     
                     ])->from('md'),
                 ])->space(2)
+
+                
             ])
             ->contentGrid([
                 'md' => 2,

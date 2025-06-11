@@ -11,6 +11,7 @@ class structure extends Model
     protected $fillable =  [
         'gambar',
         'nama',
-        'jabatan'
+        'jabatan',
+        'detail'
     ];
 }

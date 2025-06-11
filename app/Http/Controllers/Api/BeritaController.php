@@ -7,6 +7,10 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
+use Illuminate\Support\Str; // For slug generation
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator; // Import for type hinting
+
 
 class BeritaController extends Controller
 {
@@ -31,7 +35,7 @@ class BeritaController extends Controller
         if ($request->has('search') && !empty($request->search)) {
             $query->where(function ($q) use ($request) {
                 $q->where('judul', 'like', '%' . $request->search . '%')
-                  ->orWhere('isi', 'like', '%' . $request->search . '%');
+                    ->orWhere('isi', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -56,23 +60,21 @@ class BeritaController extends Controller
         $perPage = $request->get('per_page', 10);
         $perPage = min($perPage, 100); // Max 100 items per page
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $beritas */ // Add this PHPDoc
         $beritas = $query->paginate($perPage);
 
-        // Transform data
+        // Transform the data for response
         $beritas->getCollection()->transform(function ($berita) {
             return [
                 'id' => $berita->id,
                 'judul' => $berita->judul,
                 'slug' => $berita->slug,
-                'isi' => $berita->isi,
                 'excerpt' => $this->createExcerpt($berita->isi, 200),
                 'kategori' => $berita->kategori,
                 'penulis' => $berita->penulis,
                 'tanggal_publish' => $berita->tanggal_publish,
                 'tanggal_publish_formatted' => Carbon::parse($berita->tanggal_publish)->format('d M Y'),
                 'gambar' => $berita->gambar ? asset('storage/' . $berita->gambar) : null,
-                'created_at' => $berita->created_at,
-                'updated_at' => $berita->updated_at,
             ];
         });
 
@@ -175,6 +177,7 @@ class BeritaController extends Controller
         $perPage = $request->get('per_page', 10);
         $perPage = min($perPage, 50);
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $beritas */ // Add this PHPDoc
         $beritas = Berita::where('kategori', $kategori)
             ->whereDate('tanggal_publish', '<=', now())
             ->orderBy('tanggal_publish', 'desc')
@@ -234,13 +237,13 @@ class BeritaController extends Controller
     {
         // Strip HTML tags
         $text = strip_tags($content);
-        
+
         // Truncate and add ellipsis if needed
         if (strlen($text) > $length) {
             $text = substr($text, 0, $length);
             $text = substr($text, 0, strrpos($text, ' ')) . '...';
         }
-        
+
         return $text;
     }
 }

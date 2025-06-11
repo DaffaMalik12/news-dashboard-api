@@ -32,6 +32,11 @@ class StructureController extends Controller
             $query->where('Jabatan', 'like', '%' . $request->get('jabatan') . '%'); // Perhatikan 'Jabatan' jika case-sensitive
         }
 
+        // jika ada filter berdasarkan detail (query paramater: ?detail-...)
+        if ($request->has('detail')) {
+            $query->where('Detail', 'like', '%' . $request->get('detail') . '%'); // Perhatikan 'Detail' jika case-sensitive
+        }
+
         // Eksekusi query untuk mendapatkan hasilnya
         $structures = $query->get(); // <-- Panggil get() di akhir
 

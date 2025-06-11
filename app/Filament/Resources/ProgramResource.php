@@ -34,7 +34,7 @@ class ProgramResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-
+    protected static ?string $navigationGroup = 'Konten';
     // Tambahkan properti ini untuk menampilkan jumlah record di navigasi sidebar
     protected static ?string $navigationBadge = null; // Bisa juga null, ini akan secara default menampilkan count()
 
@@ -73,19 +73,21 @@ class ProgramResource extends Resource
                                     ->helperText('URL-friendly version of the program name'),
                             ]),
 
-                        Forms\Components\FileUpload::make('gambar_program')
+                        Forms\Components\FileUpload::make('gambar_pengumuman')
                             ->label('Program Image')
                             ->image()
-                            ->directory('programs')
-                            ->visibility('public')
                             ->imageEditor()
                             ->imageEditorAspectRatios([
                                 '16:9',
                                 '4:3',
                                 '1:1',
                             ])
+                            ->directory('Program')
+                            ->visibility('public')
                             ->maxSize(2048)
-                            ->helperText('Upload program image (max 2MB)'),
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->helperText('Upload gambar pendukung (maksimal 2MB). Format: JPG, PNG, WebP')
+                            ->columnSpanFull(),
 
                         Forms\Components\RichEditor::make('deskripsi')
                             ->label('Description')

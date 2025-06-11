@@ -22,8 +22,8 @@ class StructureResource extends Resource
     protected static ?string $navigationLabel = 'Struktur Organisasi';
     protected static ?string $pluralModelLabel = 'Struktur Organisasi';
     protected static ?string $modelLabel = 'Struktur Organisasi';
-    
 
+    protected static ?string $navigationGroup = 'Akademik';
 
     // ... sisanya kode Anda tetap sama ...
 
@@ -52,14 +52,14 @@ class StructureResource extends Resource
                                     ->required()
                                     ->columnSpanFull()
                                     ->helperText('Upload foto dengan rasio 1:1. Maksimal 2MB'),
-                                
+
                                 Forms\Components\TextInput::make('nama')
                                     ->label('Nama Lengkap')
                                     ->required()
                                     ->maxLength(255)
                                     ->placeholder('Masukkan nama lengkap')
                                     ->prefixIcon('heroicon-m-user'),
-                                
+
                                 Forms\Components\TextInput::make('jabatan')
                                     ->label('Jabatan')
                                     ->required()
@@ -98,16 +98,16 @@ class StructureResource extends Resource
                             ->circular()
                             ->size(80)
                             ->defaultImageUrl(url('/images/default-avatar.png')),
-                        
+
                         Tables\Columns\Layout\Stack::make([
                             Tables\Columns\TextColumn::make('nama')
                                 ->weight('bold')
                                 ->size('lg')
                                 ->color('primary'),
-                            
+
                             Tables\Columns\TextColumn::make('jabatan')
                                 ->badge()
-                                ->color(fn (string $state): string => match (true) {
+                                ->color(fn(string $state): string => match (true) {
                                     str_contains(strtolower($state), 'ketua') => 'success',
                                     str_contains(strtolower($state), 'sekretaris') => 'info',
                                     str_contains(strtolower($state), 'bendahara') => 'warning',
@@ -116,11 +116,11 @@ class StructureResource extends Resource
                                 }),
                         ])->space(1),
 
-                     
+
                     ])->from('md'),
                 ])->space(2)
 
-                
+
             ])
             ->contentGrid([
                 'md' => 2,
@@ -146,11 +146,11 @@ class StructureResource extends Resource
                             }
                         }),
                 ])
-                ->label('Aksi')
-                ->icon('heroicon-m-ellipsis-vertical')
-                ->size('sm')
-                ->color('gray')
-                ->button(),
+                    ->label('Aksi')
+                    ->icon('heroicon-m-ellipsis-vertical')
+                    ->size('sm')
+                    ->color('gray')
+                    ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -176,7 +176,6 @@ class StructureResource extends Resource
             ->defaultPaginationPageOption(12)
             ->paginationPageOptions([6, 12, 24])
             ->searchPlaceholder('Cari nama atau jabatan...');
-            
     }
 
     public static function getRelations(): array

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\StructureController;
 use App\Http\Controllers\Api\ProgramController;
 use App\Http\Controllers\Api\DataStatistikController;
+use App\Http\Controllers\Api\PengumumanController;
 
 Route::middleware('api.key')->prefix('v1')->group(function () {
     Route::prefix('berita')->group(function () {
@@ -30,6 +31,12 @@ Route::middleware('api.key')->prefix('v1')->group(function () {
     });
     Route::prefix('statistik')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\DataStatistikController::class, 'index']);
+    });
+    Route::prefix('pengumuman')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\PengumumanController::class, 'index']);
+        Route::get('/{id}', [App\Http\Controllers\Api\PengumumanController::class, 'show']);
+        Route::get('/{judul}', [App\Http\Controllers\Api\PengumumanController::class, 'byJudul']);
+        Route::get('/{tanggal_pengumuman}', [App\Http\Controllers\Api\PengumumanController::class, 'byTanggal']);
     });
 });
 

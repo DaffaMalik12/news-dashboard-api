@@ -35,6 +35,8 @@ class DataStatistikResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Data Statistik';
 
+    protected static ?string $navigationGroup = 'Akademik';
+
     protected static ?int $navigationSort = 3;
 
     // Menampilkan total record di navigation badge

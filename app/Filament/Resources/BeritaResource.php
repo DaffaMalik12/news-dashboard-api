@@ -26,6 +26,8 @@ class BeritaResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Berita';
 
+    protected static ?string $navigationGroup = 'Konten';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form

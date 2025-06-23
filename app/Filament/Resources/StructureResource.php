@@ -56,7 +56,7 @@ class StructureResource extends Resource
                                 Forms\Components\TextInput::make('nama')
                                     ->label('Nama Lengkap')
                                     ->required()
-                                    ->maxLength(255)
+                                    ->maxLength(500)
                                     ->placeholder('Masukkan nama lengkap')
                                     ->prefixIcon('heroicon-m-user'),
 
@@ -67,17 +67,19 @@ class StructureResource extends Resource
                                     ->placeholder('Masukkan jabatan')
                                     ->prefixIcon('heroicon-m-briefcase')
                                     ->datalist([
-                                        'Ketua',
-                                        'Wakil Ketua',
-                                        'Sekretaris',
-                                        'Bendahara',
-                                        'Koordinator',
-                                        'Anggota'
+                                        'Kepala Pusat Pengembangan Bahasa',
+                                        'Staf Bidang Administrasi',
+                                        'Staf Bidang Pengelola Kegiatan dan Anggaran',
+                                        'Staf Bidang Pelayanan umum',
+                                        'Staf Bidang Pengelola Data',
+                                        'Koordinator Layanan Bahasa Indonesia',
+                                        'Koordinator Layanan Bahasa Inggris',
+                                        'Koordinator Layanan Bahasa Arab'
                                     ]),
 
                                 Forms\Components\Textarea::make('detail')
                                     ->label('Detail Jabatan')
-                                    ->maxLength(500)
+                                    ->maxLength(1500)
                                     ->placeholder('Masukkan detail jabatan atau tugas')
                                     ->helperText('Opsional, berikan penjelasan lebih lanjut tentang tugas atau tanggung jawab anggota ini.')
                                     ->columnSpanFull()
@@ -108,10 +110,14 @@ class StructureResource extends Resource
                             Tables\Columns\TextColumn::make('jabatan')
                                 ->badge()
                                 ->color(fn(string $state): string => match (true) {
-                                    str_contains(strtolower($state), 'ketua') => 'success',
-                                    str_contains(strtolower($state), 'sekretaris') => 'info',
-                                    str_contains(strtolower($state), 'bendahara') => 'warning',
-                                    str_contains(strtolower($state), 'koordinator') => 'primary',
+                                    str_contains(strtolower($state), 'kepala pusat pengembangan bahasa') => 'success',
+                                    str_contains(strtolower($state), 'Staf bidang administrasi') => 'info',
+                                    str_contains(strtolower($state), 'Staf bidang pengelola kegiatan dan anggaran') => 'info',
+                                    str_contains(strtolower($state), 'Staf bidang pengelola data') => 'info',
+                                    str_contains(strtolower($state), 'Staf pengelola layanan umum') => 'warning',
+                                    str_contains(strtolower($state), 'koordinator layanan bahasa inggris') => 'primary',
+                                    str_contains(strtolower($state), 'koordinator layanan bahasa arab') => 'primary',
+                                    str_contains(strtolower($state), 'koordinator layanan bahasa indonesia') => 'primary',
                                     default => 'gray',
                                 }),
                         ])->space(1),

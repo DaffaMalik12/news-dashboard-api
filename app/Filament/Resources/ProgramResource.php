@@ -35,17 +35,11 @@ class ProgramResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationGroup = 'Konten';
-    // Tambahkan properti ini untuk menampilkan jumlah record di navigasi sidebar
-    protected static ?string $navigationBadge = null; // Bisa juga null, ini akan secara default menampilkan count()
 
-
-    // Cara paling umum (ini yang Anda butuhkan)
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-
-
 
     public static function form(Form $form): Form
     {
@@ -73,7 +67,8 @@ class ProgramResource extends Resource
                                     ->helperText('URL-friendly version of the program name'),
                             ]),
 
-                        Forms\Components\FileUpload::make('gambar_pengumuman')
+                        // PERBAIKAN 1: Konsisten dengan nama field
+                        Forms\Components\FileUpload::make('gambar_program')
                             ->label('Program Image')
                             ->image()
                             ->imageEditor()
@@ -82,7 +77,7 @@ class ProgramResource extends Resource
                                 '4:3',
                                 '1:1',
                             ])
-                            ->directory('Program')
+                            ->directory('programs')
                             ->visibility('public')
                             ->maxSize(2048)
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
@@ -110,7 +105,6 @@ class ProgramResource extends Resource
                             ->options([
                                 'Sedang Berjalan' => 'Sedang Berjalan',
                                 'Selesai' => 'Selesai',
-
                             ])
                             ->default('Sedang Berjalan')
                             ->native(false)
@@ -124,12 +118,21 @@ class ProgramResource extends Resource
     {
         return $table
             ->columns([
+                // PERBAIKAN 2: Tambahkan disk dan perbaiki URL
                 ImageColumn::make('gambar_program')
                     ->label('Image')
                     ->circular()
                     ->size(60)
+                    ->disk('public') // Pastikan disk sesuai dengan konfigurasi Anda
                     ->defaultImageUrl(url('/images/placeholder-program.png'))
-                    ->toggleable(),
+                    ->toggleable()
+                    ->getStateUsing(function ($record) {
+                        // Debug: cek apakah gambar ada
+                        if ($record->gambar_program) {
+                            return $record->gambar_program;
+                        }
+                        return null;
+                    }),
 
                 Tables\Columns\TextColumn::make('nama_program')
                     ->label('Program Name')
@@ -152,7 +155,6 @@ class ProgramResource extends Resource
                     ->limit(50)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
-                        // Hapus tag HTML dari state sebelum mengecek panjang atau menampilkannya di tooltip
                         $cleanState = strip_tags($state);
 
                         if (strlen($cleanState) <= 50) {
@@ -160,7 +162,7 @@ class ProgramResource extends Resource
                         }
                         return $cleanState;
                     })
-                    ->formatStateUsing(fn(string $state): string => strip_tags($state)) // Ini kuncinya!
+                    ->formatStateUsing(fn(string $state): string => strip_tags($state))
                     ->toggleable(),
 
                 Tables\Columns\BadgeColumn::make('status')
@@ -168,12 +170,10 @@ class ProgramResource extends Resource
                     ->colors([
                         'warning' => 'Selesai',
                         'success' => 'Sedang Berjalan',
-
                     ])
                     ->icons([
                         'heroicon-o-pencil' => 'Sedang Berjalan',
                         'heroicon-o-eye' => 'Selesai',
-
                     ])
                     ->searchable()
                     ->sortable(),
@@ -196,7 +196,6 @@ class ProgramResource extends Resource
                     ->options([
                         'Sedang Berjalan' => 'Sedang Berjalan',
                         'Selesai' => 'Selesai',
-
                     ])
                     ->native(false),
             ])

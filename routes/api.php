@@ -38,6 +38,10 @@ Route::middleware('api.key')->prefix('v1')->group(function () {
         Route::get('/{judul}', [App\Http\Controllers\Api\PengumumanController::class, 'byJudul']);
         Route::get('/{tanggal_pengumuman}', [App\Http\Controllers\Api\PengumumanController::class, 'byTanggal']);
     });
+    Route::prefix('visimisi')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\VisiMisiController::class, 'index']);
+        Route::get('/{id}', [App\Http\Controllers\Api\VisiMisiController::class, 'show']);
+    });
 });
 
 Route::get('/health', function () {

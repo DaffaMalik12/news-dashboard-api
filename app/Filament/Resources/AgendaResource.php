@@ -222,17 +222,12 @@ class AgendaResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = static::getModel()::whereDate('tanggal_agenda', today())->count();
-        return $count > 0 ? (string) $count : null;
+        return static::getModel()::count();
     }
 
-    public static function getNavigationBadgeColor(): ?string
+    public static function getNavigationBadgeColor(): string|array|null
     {
-        return 'info';
-    }
-
-    public static function getNavigationBadgeTooltip(): ?string
-    {
-        return 'Agenda hari ini';
+        // Mengubah warna badge navigation dari hijau (success) menjadi orange (warning)
+        return static::getModel()::count() > 0 ? 'warning' : 'gray';
     }
 }

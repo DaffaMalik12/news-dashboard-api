@@ -238,11 +238,12 @@ class PengumumanResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('tanggal_pengumuman', '>', now())->count();
+        return static::getModel()::count();
     }
 
-    public static function getNavigationBadgeColor(): ?string
+    public static function getNavigationBadgeColor(): string|array|null
     {
-        return static::getNavigationBadge() > 0 ? 'warning' : null;
+        // Mengubah warna badge navigation dari hijau (success) menjadi orange (warning)
+        return static::getModel()::count() > 0 ? 'warning' : 'gray';
     }
 }
